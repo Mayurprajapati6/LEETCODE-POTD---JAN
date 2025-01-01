@@ -1,0 +1,105 @@
+// LEETCODE -> 1422
+
+                                                      APPROACH - 1 
+
+class Solution {
+public:
+
+     // TC = O(N)
+     // SC = O(1)
+    
+    int maxScore(string s) {
+      int n = s.size();
+        int prev_zero = 0;
+        int zeros = 0;
+        int result = INT_MIN;
+
+        for(int i=0;i<n-1;i++) {
+            if(s[i]=='0') zeros += 1;
+            int ones = 0;
+            for(int j=i+1;j<n;j++) {
+                if(s[j]=='1') ones++;
+            }
+
+            int ans = zeros + ones;
+            result = max(result,ans);
+        }
+
+        return result;
+    
+    }
+};
+
+                                                                  APPRAOACH - 2
+
+class Solution {
+public:
+
+    // TC = O(N)  -> 1 PASS
+    // SC = O(1)
+    
+    int maxScore(string s) {
+
+        // TC = O(N)  -> 1 PASS
+        // SC = O(1)
+
+        int n = s.size();
+
+        int score = INT_MIN;
+
+        int zeros = 0;
+        int ones = 0;
+
+        for(int i=0;i<=n-2;i++){
+            if(s[i] == '1'){
+                ones++;
+            }else {
+                zeros++;
+            }
+
+            score = max(score,zeros - ones);
+        }
+
+        if(s[n-1] == '1'){
+            ones++;
+        }
+
+        return score + ones;     
+    }
+};
+
+                                  APPROACH - 3
+
+
+class Solution {
+public:
+
+        // TC = O(N)
+        // SC = O(1)
+    
+    int maxScore(string s) {    
+        
+         int n = s.size();
+         int result = INT_MIN;
+        
+         int total_ones = count(begin(s),end(s),'1');  // 1 pass
+
+         int zeros = 0;
+         int ones = 0;
+
+         for(int i=0;i <=n-2 ;i++){
+            if(s[i] == '1'){
+                ones++;
+            }
+             else{
+                zeros++;
+             }
+
+             int right_ones = total_ones - ones;
+
+             result = max(result,zeros + right_ones);
+        }
+        return result;
+    }
+};
+
