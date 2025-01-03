@@ -1,0 +1,91 @@
+------------------------------  Approach -> 1(Brute Force) (TLE)
+
+class Solution {
+public:
+        // TC = O(N^2)
+        // SC = O(1)
+        
+        // int n =  nums.size();
+        // int split = 0;
+
+        // for(int i=0;i<n-1;i++) {
+        //     int first = 0;
+        //     for(int j=0;j<=i;j++) {
+        //         first += nums[j];
+        //     }
+
+        //     int second = 0;
+        //     int right = n - i - 1;
+        //     for(int k=n-1;k>=n - right;k--) {
+        //         second += nums[k];
+        //     }
+
+        //     if(first >= second) 
+        //         split++;
+        // }
+
+        // return split;
+    }
+};
+
+-----------------------------------------------------------------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-------------------------------------------------------
+
+------------------------- Approach -> 2 (Optimal)
+
+class Solution {
+public:
+    // TC = O(N + N) => O(2N) => O(N)
+    // SC = O(N) // for cummulativeSum
+    typedef long long ll;
+    int waysToSplitArray(vector<int>& nums) {
+
+        ll n =  nums.size();
+        int split = 0;
+        
+        vector<ll>leftPrefixSum(n);  // SC -> O(N)
+        leftPrefixSum[0] = nums[0];
+        for(ll i=1;i<n;i++) {       // TC = O(N)
+            leftPrefixSum[i] = leftPrefixSum[i-1] + nums[i];
+        }
+
+        /*
+            Here my thought process was first i calculate cummulative sum for each index.
+            now by showing two or more example i analyze if sum of the all the digit means sum
+            of the every is n assume then for ith index right side sum means (n-i-1) element
+            sum is n - cummulativeSum[i];
+
+
+            ex. nums[2,3,1,0]
+                cummulativeSum = [2,5,6,6];
+                int n = 6(after calculate manually not in code for this how to calculate total n i write below)
+
+                then for i=0 means ele = 2 , cummulaiveSum = 2
+                    then right = m - i - 1 (here m = nums.size())
+                    then second = n - cummulativeSum
+                                = 6 - 2
+                                = 4
+
+            for calculate totalSum you observe while calculate cummulative sum the last index sum is equal to 
+            the totalSum. that's why in for loop for finding second i take leftPrefixSum[n-1] // last index of the prefixSum
+        */
+
+        /*    // Another Approach
+            you can also solve using two prfixSum vector where first vector store from start to end digit sum
+            while second vector store end to start digit sum
+
+
+        */
+
+        
+
+        for(ll i=0;i<n-1;i++) {   // TC = O(N)
+            ll first = leftPrefixSum[i];
+            ll second = leftPrefixSum[n-1] - first;  // 
+
+            if(first >= second) split++;
+        }
+
+        return split;
+        
+    }
+};
