@@ -1,0 +1,44 @@
+------------ Approach - 1  ---------------------------------
+// TC = O(n^2×L)
+  // Where n^2 comes from the nested loops
+  //       L -> is the cost of substring extraction in vector words.
+// SC = O(1)
+
+class Solution {
+public:
+   
+    bool isPrefixAndSuffix(string str1,string str2) {
+        int length_str1 = str1.length();
+        int length_str2 = str2.length();
+        int p = 0;
+        int q = 0;
+        
+        // Check if str1 is a prefix of str2
+        if(length_str1 <= length_str2 && str2.substr(0,length_str1) == str1) {
+            p = 1;
+        }
+
+        // Check if str1 is a suffix of str2
+        if(length_str1 <= length_str2 && str2.substr(length_str2-length_str1) == str1) { // check index = length_str2 - length_str1 in str2 start from this index and check end of the str2
+            q = 1;
+        }
+
+        return p == 1 && q == 1;
+    }
+
+
+    int countPrefixSuffixPairs(vector<string>& words) {
+        int n = words.size();
+        int count = 0;
+
+        for(int i=0;i<n-1;i++) {
+            for(int j=i+1;j<n;j++) {
+                if(isPrefixAndSuffix(words[i],words[j])) {
+                    count++;
+                }
+            }
+        }
+        return count;
+        
+    }
+};
