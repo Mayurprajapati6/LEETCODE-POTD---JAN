@@ -1,0 +1,27 @@
+---------- APPRAOCH  - 1 (using find and substring) -------
+// TC = O(N * P) where N = words.size() & P = pref.size();
+// SC = O(1)
+class Solution {
+public:
+    int prefixCount(vector<string>& words, string pref) {
+        int p = pref.size();
+        int n = words.size();
+        int count = 0;
+
+        for(int i=0;i<n;i++) {
+            // if(words[i].find(pref) == 0) {
+            //     count++;
+            // }
+
+            if(words[i].substr(0,p) == pref) {
+                count++;
+            }
+        }
+        return count;
+        
+    }
+};
+
+-------------------------------------------------------- ******************************************************************************--------------------------------------------------------------------------------
+
+--- APPROACH -> 2 (using Trie) ---------
