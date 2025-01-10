@@ -1,0 +1,45 @@
+--------------- APPROACH - 1 -------------------
+TC = O(n.L1 + m.L2)  Where L1 and L2 are the average lengths of the words in words1 and words2
+SC = O(n*L1) // if you consider result vector
+class Solution {
+public:
+    
+    vector<string> wordSubsets(vector<string>& words1, vector<string>& words2) {
+        int n = words1.size();
+        int m = words2.size();
+
+        vector<int>maxFreq(26,0);
+        vector<string>result;
+
+        for(string &word2: words2) {
+            vector<int>freq(26,0);
+            for(char &ch: word2) {
+                freq[ch-'a']++;
+            }
+
+            for(int i=0;i<26;i++) {
+                maxFreq[i] = max(maxFreq[i],freq[i]);
+            }
+        }
+
+        for(string &word1: words1) {
+            vector<int>freq(26,0);
+            for(char &ch: word1) {
+                freq[ch-'a']++;
+            }
+            bool universal = true;
+            for(int i=0;i<26;i++) {
+                if(freq[i] < maxFreq[i]) {
+                    universal = false;
+                    break;
+                }
+            }
+            if(universal) {
+                result.push_back(word1);
+            }
+        }
+        return result;
+        
+        
+    }
+};
