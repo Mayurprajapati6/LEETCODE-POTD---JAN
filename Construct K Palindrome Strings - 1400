@@ -1,0 +1,27 @@
+---------------- APPROACH - 1 ----------------
+// TC = O(n+n) ~= O(n)
+// SC = O(26) ~ O(1) // beacuse in map we store only lower alphabet freq
+
+class Solution {
+public:
+
+    bool canConstruct(string s, int k) {
+        int n = s.size();
+        if(k > n) return false;
+
+        unordered_map<char,int>mpp;  //space = O(n)
+
+        for(char &ch: s) {  // O(n)
+            mpp[ch]++;
+        }
+
+        int oddCount = 0;  // O(n)
+        for(auto &mp: mpp) {
+            if(mp.second % 2 != 0) {
+                oddCount++;
+            }
+        }    
+
+        return oddCount <= k;
+    }
+};
