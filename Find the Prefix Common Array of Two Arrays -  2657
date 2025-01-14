@@ -1,0 +1,42 @@
+------------ APPROACH - > 1  -----------
+class Solution {
+public:
+    // TC = O(N)
+    // SC = O(N)
+    vector<int> findThePrefixCommonArray(vector<int>& A, vector<int>& B) {
+        int size_a = A.size();
+        int size_b = B.size();
+
+        unordered_set<int>st_a;
+        unordered_set<int>st_b;
+
+        vector<int>result(size_a,0);
+
+        int currentCount = 0;
+
+        for(int i=0;i<size_a;i++) {
+            st_a.insert(A[i]);
+            st_b.insert(B[i]);
+
+            if(st_a.count(B[i])) {
+                currentCount++;
+            }
+            if(st_b.count(A[i])) {
+                currentCount++;
+            }
+
+            if(A[i] == B[i]) {
+                currentCount--;
+            }
+
+            result[i] = currentCount;
+        }
+
+        
+
+        
+
+        return result;
+        
+    }
+};
