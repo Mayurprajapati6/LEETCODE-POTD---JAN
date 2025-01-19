@@ -1,0 +1,56 @@
+----------- APPROACH -> 1 ( using Heap ) ----------------
+class Solution {
+public:
+    // TC = O(m*n log(m*n))
+    // SC = O(m*n)
+    typedef pair<int , pair<int,int>> PP;
+    vector<vector<int>>directions = {{0,1},{1,0},{0,-1},{-1,0}};
+    int trapRainWater(vector<vector<int>>& heightMap) {
+        int m = heightMap.size();
+        int n = heightMap[0].size();
+
+        priority_queue<PP,vector<PP>,greater<>>boundrayCells;
+
+        vector<vector<bool>>visited(m,vector<bool>(n,false));
+
+        for(int row=0;row<m;row++) {
+            for(int col: {0,n-1}) {
+                boundrayCells.push({heightMap[row][col] , {row,col}});
+                visited[row][col] = true;
+            }
+        }
+
+        for(int col=0;col<n;col++) {
+            for(int row: {0,m-1}) {
+                boundrayCells.push({heightMap[row][col] , {row,col}});
+                visited[row][col] = true;
+            }
+
+        }
+
+        int trappedWater = 0;
+
+        while(!boundrayCells.empty()) {
+            auto [height,cell] = boundrayCells.top();
+            boundrayCells.pop();
+            int i = cell.first;
+            int j = cell.second;
+
+            for(vector<int>&dir : directions) {
+                int i_ = i + dir[0];
+                int j_ = j + dir[1];
+
+                if(i_>=0 && j_>=0 && i_<m && j_<n && !visited[i_][j_]) {
+                    trappedWater += max(0,height - heightMap[i_][j_]); // if value is <0 hogi to trappedWater me 0 add hoga
+
+                    boundrayCells.push({max(height , heightMap[i_][j_]) , {i_,j_}});
+
+                    visited[i_][j_] = true;
+                }
+            }
+        }
+
+        return trappedWater;
+        
+    }
+};
