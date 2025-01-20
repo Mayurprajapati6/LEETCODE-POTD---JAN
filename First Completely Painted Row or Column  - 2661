@@ -1,0 +1,110 @@
+-------------- APPROACH -> 1 ( TLE ) --------------------
+  // TC = O( K * m * n ) where , k = while loop ( arr.size() )
+  // SC = O( m * n)
+
+class Solution {
+public:
+
+    vector<vector<int>>directions = {{0,1},{0,-1},{1,0},{-1,0}};
+    
+
+    int solve(int i,int x,int y,vector<vector<int>>&mat) {
+        int m = mat.size();
+        int n = mat[0].size();
+        int count = 0;
+        for(int dir=0;dir<=3;dir) {
+            int x_ = x + directions[dir][0];
+            int y_ = y + directions[dir][1];
+
+            if(x_>=0 && x_<m && y_>=0 && y_<n && mat[x_][y_] == -1) {
+                count++;
+
+                if(count == m-1 || count == n-1) {
+                    return i;
+                    
+                }
+            }
+        }
+        mat[x][y] = -1;
+
+        return -2;
+    }
+
+    int firstCompleteIndex(vector<int>& arr, vector<vector<int>>& mat) {
+        int arrSize = arr.size();
+
+        int m = mat.size();
+        int n = mat[0].size();
+
+        int i = 0;
+        int result;
+        while(i < arrSize) {
+            for(int j=0;j<m;j++) {
+                for(int k=0;k<n;k++) {
+                    if(mat[j][k] == arr[i]) {
+                        int x = j;
+                        int y = k;
+                        result = solve(i,x,y,mat);
+                        if(result == i) {
+                            return result;
+                            
+                        }
+                    }
+                }
+            }
+            i++;
+        }
+        return arrSize;        
+    }
+};
+
+--------------------------------------------------------------******************************************************************************************---------------------------------------------------------------
+-------------- APPROACH -> 2 ------------
+class Solution {
+public:   
+
+    // TC = O(m*n)
+    // SC = O(m*n)
+
+    int firstCompleteIndex(vector<int>& arr, vector<vector<int>>& mat) {
+        int m = mat.size();
+        int n = mat[0].size();
+
+        unordered_map<int,int>mpp;
+
+        for(int i=0;i<arr.size();i++) {
+            int val = arr[i];
+            mpp[val] = i;
+        }      
+
+        int minIndex = INT_MAX;
+
+        // check for all rows
+        for(int row=0;row<m;row++) {
+            int lastIndex = INT_MIN;
+
+            for(int col=0;col<n;col++) {
+                int val = mat[row][col];
+                int idx = mpp[val];
+                lastIndex = max(lastIndex,idx);
+            }
+            minIndex = min(minIndex,lastIndex);
+        }
+
+        // check for all cols
+
+        for(int col=0;col<n;col++) {
+            int lastIndex = INT_MIN;
+
+            for(int row=0;row<m;row++) {
+                int val = mat[row][col];
+                int idx = mpp[val];
+                lastIndex = max(lastIndex,idx);
+            }
+
+            minIndex = min(minIndex,lastIndex);
+        }
+
+        return minIndex;
+    }
+};
