@@ -1,0 +1,61 @@
+------------ approach -> 1 -----------
+class Solution {
+public:
+    // TC = O(N)
+    // SC = O(N)
+    int maximumInvitations(vector<int>& favorite) {
+         int n = favorite.size();
+        vector<int> indegree(n, 0), visited(n, 0), maxDepth(n, 0);
+
+        // Calculate indegrees for all nodes
+        for (int i = 0; i < n; ++i) {
+            ++indegree[favorite[i]];
+        }
+
+        // Step 1: Calculate the length of chains leading to cycles
+        queue<int> q;
+        for (int i = 0; i < n; ++i) {
+            if (indegree[i] == 0) {
+                q.push(i);
+            }
+        }
+
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+            visited[node] = 1;
+
+            int next = favorite[node];
+            maxDepth[next] = max(maxDepth[next], maxDepth[node] + 1);
+            if (--indegree[next] == 0) {
+                q.push(next);
+            }
+        }
+
+        // Step 2: Detect cycles and calculate their size
+        int maxCycleSize = 0, totalTwoCycleChains = 0;
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i]) {
+                int cycleSize = 0;
+                int node = i;
+                while (!visited[node]) {
+                    visited[node] = 1;
+                    node = favorite[node];
+                    ++cycleSize;
+                }
+
+                // If it's a 2-cycle, consider the chains connected to it
+                if (cycleSize == 2) {
+                    int left = maxDepth[i];
+                    int right = maxDepth[favorite[i]];
+                    totalTwoCycleChains += left + right + 2;
+                } else {
+                    maxCycleSize = max(maxCycleSize, cycleSize);
+                }
+            }
+        }
+
+        // Step 3: Return the maximum number of invitations
+        return max(maxCycleSize, totalTwoCycleChains);
+    }
+};
